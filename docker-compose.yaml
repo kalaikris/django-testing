@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: ./django-docker-file/
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - ./app:/code
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Welcome@123
+      POSTGRES_DB: djangocore_new
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sample@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: sample@1234
+    ports:
+      - 8080:80
+    depends_on:
+      - db
